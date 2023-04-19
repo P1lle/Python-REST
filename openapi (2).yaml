@@ -1,0 +1,209 @@
+openapi: 3.0.3
+info:
+  version: "0.0.1"
+  title: Todo List
+  description: >-
+    This is a simple todo list api du lustmolch
+
+
+    
+  contact:
+    email: philipp@xyz.de
+servers:
+  - url: https://127.0.0.1
+    description: A Server to administrate todo-lists
+tags:
+  - name: todo-list
+    description: Operations about todo-lists
+paths:
+  /todo-list/{list_id}:
+    get:
+      parameters:
+        - in: path
+          name: list_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+        '404':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+    post:
+      summary: Creates a new todo-list
+      parameters:
+        - in: path
+          name: list_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+  /todo-list:
+    post:
+      responses: 
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/todolist'
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+              
+  /todo-list/{list_id}/entry:
+    post:
+      summary: Fügt einen neuen Listeneintrag hinzu
+      parameters:
+        - in: path
+          name: list_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todolistitem'
+        '404':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Data Error
+          content:
+            text/plain:
+              schema:
+                type: string
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+          
+  /todo-list/{list_id}/entry/{entry_id}:
+    put:
+      summary: Aktualisiert einen bestehenden Eintrag
+      parameters:
+        - in: path
+          name: list_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+        - in: path
+          name: entry_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todolistitem'
+        '404':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Data Error
+          content:
+            text/plain:
+              schema:
+                type: string
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+    delete:
+      summary: Löscht einen einzelnen Eintrag einer Todo-Liste
+      parameters:
+        - in: path
+          name: list_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+        - in: path
+          name: entry_id
+          schema:
+            type: integer
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+           text/plain:
+            schema:
+              type: string
+        '404':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+        '429':
+          description: Too many requests
+        'default':
+          description: Wrong Endpoint
+components:
+  schemas:
+    todolist:
+      type: object
+      properties: 
+        id:
+          type: integer
+        name:
+          type: string
+    todolistitem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        beschreibung:
+          type: string
